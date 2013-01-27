@@ -1,0 +1,18 @@
+db update
+
+/* statuses */ 09102012
+// create statuses table
+CREATE TABLE IF NOT EXISTS `statuses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `mail` tinyint(1) NOT NULL,
+  `search` tinyint(1) NOT NULL,
+  `attendance` tinyint(1) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) AUTO_INCREMENT=1 ;
+
+// add status_id to student table
+ALTER TABLE  `students` ADD  `status_id` INT( 11 ) NOT NULL AFTER  `contract_renewal_date`;
+UPDATE  `students` SET  `status_id` =1;

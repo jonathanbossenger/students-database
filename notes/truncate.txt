@@ -1,0 +1,16 @@
+TRUNCATE `account_types`;
+TRUNCATE `banks`;
+TRUNCATE `levels`;
+TRUNCATE `membership_types`;
+TRUNCATE `payment_methods`;
+TRUNCATE `programs`;
+TRUNCATE `program_students`;
+TRUNCATE `contacts`;
+TRUNCATE `students`;
+
+
+, 'default', array('class' => 'success')
+, 'default', array('class' => 'failure')
+, 'default', array('class' => 'message')
+
+
