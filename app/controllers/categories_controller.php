@@ -5,17 +5,19 @@ class CategoriesController extends AppController {
 
 	function get() {
 		$categoryId = $this->params['pass'][0];
-		$categories = $this->Category->find('list', array('conditions' => array('Category.parent_id'=>$categoryId)));
-		$this->layout = false;
+		$categories = $this->Category->find('all', array('fields' => array('id', 'name'), 'conditions' => array('Category.parent_id'=>$categoryId)));
+		$this->layout = false; 
 		$this->render(false);
-		echo json_encode($categories);					
+		echo json_encode($categories);
 	}
 	
 	function index() {
 		
-		$this->paginate = array(
+		/*$this->paginate = array(
 				'conditions' => array('Category.parent_id'=>null),
-		);
+		);*/
+		$Categories = $this->Category->find('list');
+		$this->set(compact('Categories'));
 		$this->set('categories', $this->paginate());		
 		
 		/*
@@ -43,7 +45,12 @@ class CategoriesController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
-			debug($this->data); die;
+			$parentCategories = array_reverse($this->data['Category']['parent_category']);
+			foreach ($parentCategories as $parentCategory){
+				if ($parentCategory > 0){
+					$this->data['Category']['parent_id'] = $parentCategory;
+				}
+			}
 			$this->Category->create();
 			if ($this->Category->save($this->data)) {
 				$this->Session->setFlash(__('The category has been saved', true));
@@ -53,6 +60,7 @@ class CategoriesController extends AppController {
 			}
 		}
 		$parentCategories = $this->Category->find('list', array('conditions' => array('Category.parent_id' => null)));
+		$parentCategories = array('0' => 'None') + $parentCategories;
 		$this->set(compact('parentCategories'));
 	}
 
@@ -73,6 +81,7 @@ class CategoriesController extends AppController {
 			$this->data = $this->Category->read(null, $id);
 		}
 		$parentCategories = $this->Category->find('list');
+		$parentCategories = array('0' => 'None') + $parentCategories;
 		$this->set(compact('parentCategories'));
 	}
 

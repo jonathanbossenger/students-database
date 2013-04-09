@@ -4,11 +4,13 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
+			<th><?php echo $this->Paginator->sort('parent_id');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
 	$i = 0;
 	foreach ($categories as $category):
+		$parentId = $category['Category']['parent_id'];
 		$class = null;
 		if ($i++ % 2 == 0) {
 			$class = ' class="altrow"';
@@ -17,6 +19,7 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $category['Category']['id']; ?>&nbsp;</td>
 		<td><?php echo $category['Category']['name']; ?>&nbsp;</td>
+		<td><?php echo (!empty($parentId) ? $Categories[$parentId] : '' ); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $category['Category']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $category['Category']['id'])); ?>
