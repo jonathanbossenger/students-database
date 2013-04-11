@@ -45,10 +45,13 @@ class CategoriesController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
-			$parentCategories = array_reverse($this->data['Category']['parent_category']);
+			//debug($this->data); //die;
+			$parentCategories = $this->data['Category']['parent_category'];
+			$parentCategories = array_reverse($parentCategories);
 			foreach ($parentCategories as $parentCategory){
-				if ($parentCategory > 0){
+				if (intval($parentCategory) > 0){
 					$this->data['Category']['parent_id'] = $parentCategory;
+					break;
 				}
 			}
 			$this->Category->create();
@@ -70,6 +73,7 @@ class CategoriesController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
+			$this->data['Category']['parent_id'] = $this->data['Category']['parent_category'];
 			if ($this->Category->save($this->data)) {
 				$this->Session->setFlash(__('The category has been saved', true));
 				$this->redirect(array('action' => 'index'));
@@ -79,6 +83,7 @@ class CategoriesController extends AppController {
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Category->read(null, $id);
+			$this->data['Category']['parent_category'] = $this->data['Category']['parent_id'];
 		}
 		$parentCategories = $this->Category->find('list');
 		$parentCategories = array('0' => 'None') + $parentCategories;

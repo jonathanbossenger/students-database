@@ -4,7 +4,7 @@
 		<legend><?php __('Edit Category'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('parent_category');
+		echo $this->Form->input('parent_category', array('label' => 'Select Parent Category'));
 		echo $this->Form->input('name');
 	?>
 	</fieldset>

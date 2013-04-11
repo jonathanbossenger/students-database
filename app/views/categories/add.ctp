@@ -3,7 +3,7 @@
 	<fieldset>
 		<legend><?php __('Add Category'); ?></legend>
 	<?php
-		echo $this->Form->input('parent_category', array('class' => 'level-1 categoryselect', 'label' => 'Filter Top Level Category', 'name' => 'data[Category][parent_category][1]'));
+		echo $this->Form->input('parent_category', array('class' => 'level-1 categoryselect', 'label' => 'Filter Parent Category', 'name' => 'data[Category][parent_category][1]'));
 		echo $this->Form->input('name');
 	?>
 	</fieldset>
