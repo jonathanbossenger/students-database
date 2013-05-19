@@ -2,6 +2,7 @@
 	<ul>
 		<li id="selected"><?php echo $this->Html->link(__('Attendance', true), array('controller' => 'students', 'action' => 'attendance')); ?></li>
 		<li><?php echo $this->Html->link(__('Report', true), array('controller' => 'students', 'action' => 'attendance_report')); ?></li>
+		<li><?php echo $this->Html->link(__('Loyalty Search', true), array('controller' => 'students', 'action' => 'attendance_search')); ?></li>
 	</ul>
 </div>
 <div id="tab-content">

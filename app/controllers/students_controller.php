@@ -10,10 +10,17 @@ class StudentsController extends AppController {
 			$this->loadModel('Search');
 			$search = $this->Search->read(null, $searchId);
 			$conditions = unserialize($search['Search']['search']);
+			
+			$validStatuses = $this->Student->Status->find('list', array('conditions' => array('attendance' => '1')));
+			$statuses = array();
+			foreach ($validStatuses as $id => $value){
+				$statuses[] = $id;
+			}			
 
 			if ($conditions[0] == 'attendance'){
 				$attendanceType = $conditions[1]; 
 				$conditions = array('StudentAttendance.date BETWEEN ? AND ?' => array($conditions[2], $conditions[3]));
+				$conditions['Student.status_id'] = $statuses;
 				$studentAttendances = $this->Student->StudentAttendance->find('all', array('conditions' => $conditions));
 				
 				$studentsData = array();
@@ -34,7 +41,7 @@ class StudentsController extends AppController {
 							$attendedStudents[$studentAttendance['Student']['student_number']] = $studentAttendance['Student']['id'];	
 						}
 					}    
-					$allStudents = $this->Student->find('list', array('fields' => array('student_number', 'id')));
+					$allStudents = $this->Student->find('list', array('fields' => array('student_number', 'id'), 'conditions' => array('status_id' => $statuses)));
 					$nonAttendanceStudents = array_diff($allStudents, $attendedStudents);
 					$studentsData = $this->Student->find('all', array('conditions' => array('Student.id' => $nonAttendanceStudents)));
 				}
@@ -189,7 +196,7 @@ class StudentsController extends AppController {
 	    	$statuses = array();
 	    	foreach ($validStatuses as $id => $value){
 	    		$statuses[] = $id;
-	    	}			
+	    	}
 			
 			$search = array('attendance', $attendanceType, $startDate, $endDate);
 			$this->loadModel('Search');
@@ -222,7 +229,7 @@ class StudentsController extends AppController {
 						$attendedStudents[$studentAttendance['Student']['student_number']] = $studentAttendance['Student']['id'];	
 					}
 				}    
-				$allStudents = $this->Student->find('list', array('fields' => array('student_number', 'id')));
+				$allStudents = $this->Student->find('list', array('fields' => array('student_number', 'id'), 'conditions' => array('status_id' => $statuses)));
 				$nonAttendanceStudents = array_diff($allStudents, $attendedStudents);
 				$students = $this->Student->find('all', array('conditions' => array('Student.id' => $nonAttendanceStudents)));
 			}
@@ -236,6 +243,19 @@ class StudentsController extends AppController {
 		$this->set(compact('attendanceTypes', 'searchId'));
 	}
 
+	function attendance_search(){
+		if (!empty($this->data)) {
+			$startDateArray = $this->data['Student']['start_date'];
+			$endDateArray = $this->data['Student']['end_date'];
+			$startDate = $startDateArray['year'] . '-' . $startDateArray['month'] . '-' . $startDateArray['day'];
+			$endDate = $endDateArray['year'] . '-' . $endDateArray['month'] . '-' . $endDateArray['day'];		
+
+			$validStatuses = $this->Student->Status->find('list', array('conditions' => array('attendance' => '1')));
+			
+			
+		}
+	}
+	
 	function payments(){
 		if (!empty($this->data)){
 			
